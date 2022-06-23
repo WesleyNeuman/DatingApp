@@ -1,0 +1,5 @@
+Should have a model for each type of data we expect to come back from our api
+
+Whenever we set up new data, we should:
+1) Add a new model of it
+2) Set up the service to handle the data

@@ -1,0 +1,23 @@
+-- Necessary parts of the API --
+1: Controllers
+- The controller contains the touchpoints of the api when a specific endpoint is called
+- These actions can be anything from returning text to logging data
+- In our project, we also use a base api controller to establish a primary endpoint   
+    - Other controllers inherit from this base to add different functionalities at extensions from that endpoint
+
+2: Entities
+- Entities are data structures that we can find in our entity framework database
+- The rule of thumb I believe exists is that each table in the database contains one kind of entity
+- I believe that we should avoid having entities create any data through self-referencing methods
+    - They should only contain fields that are in the database
+
+3: Data Context
+- This is the most adjacent point of the database to the api program
+- It doesn't need much, but should contain properties that represent staged changes to the database
+    - For example, the DataContext class in this program has a DbSet of AppUsers that we populate to log data
+
+4: DTOs
+- Standing for Data Transfer Objects, these components represent data that is actually sent clientside from the server
+- They will usually contain bits and pieces of entities, or the results of actions on entity data
+- Controllers will send ActionResults of DTOs
+- There can also be DTOs that use different permutations of the same Entity for different purposes
