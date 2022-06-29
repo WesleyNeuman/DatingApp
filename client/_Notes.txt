@@ -1,0 +1,44 @@
+-- How to do things --
+1: Generating files
+- Most of the files we create have multiple files associated with them, so creating things through the command line
+    makes it way easier to ensure everything is captured. This has the added benefit of prepopulating those files.
+- The most common thing we've used in this lecture so far are components. We create them by navigating to the directory
+    we want the component in and do "ng g c <name> --skip-tests" which is a shortened form of
+    "angular generate component <name> --skip-tests"
+
+2: Determine whether or not to show a component
+- We can use ngIf="" to determine whether a component should be visible. This can be done asynchronously and is very
+    easy to do by determining whether a value is present or not. For example, in our nav component, we only show
+    the dropdown that has a user's edit profile and logout commands if there is a currentUser at all
+
+3: Iterating
+- Oftentimes if we have a collection of something, we want to show all of those items but would prefer not to
+    copy and paste. We can use ngFor to instantiate a component for each item in a collection. For example,
+    in our member-list component, we want to display all of our members. We do this by creating a div.row for a row
+    of items and then iterate through all of our members. Then for each member, we create a member-card component.
+
+4: Passing information between components
+- In my iterating example, we also want to pass down each member we iterate through to the member-card. To do this, we
+    need two things. First, we need to define a property in the .ts class of the RECEIVING component that's defined with
+    an "@Input decorator". This shows that the property should be populated on instantiation. We also need to define
+    that passing in during instantiation in the parent component. That means adding a section to the component instantiation
+    that follows this syntax: "[<input property name>] = <input property value>"
+- We can also emit values from a child to a parent. To do this, we need to define a child's property with the @Output decorator
+    and add an EventEmitter definition. We also need a method that actually emits this value. Then we need to go to the child
+    template and make sure that method is called through some action like clicking a button. We do this by 
+
+-- Types of Files --
+1: Components
+- Components are broken down into 3 parts
+    - Typescript files: Similar to a class file in C#, this is where we describe what modules we're using and what
+        functionality we desire for the component. Interactions with APIs are defined here
+    - HTML "Template" files: This is where we describe the "physical", either visible or invisible attributes of the
+        component. These can be highly varied in terms of scope, and will often contain other implementations of templates.
+        For example, our top level template is the app component, and the only thing it (currently) contains is
+        the nav component and a container with a router outlet. The nav component however defines all sorts of dropdowns
+        and buttons for functionality
+    - CSS files: These files are used exclusively for styling their associated components. There are a huge amount of
+        things that can be done with these files. We've used them for adding margins to items, text formatting, padding,
+        or changing the appearance of the mouse cursor when hovering over certain objects
+
+2: 
