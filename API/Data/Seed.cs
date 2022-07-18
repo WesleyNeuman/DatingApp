@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-//using System.Text.Json;
-using System.Threading.Tasks;
 using API.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -13,24 +8,43 @@ namespace API.Data
 {
     public class Seed
     {
-        public static async Task SeedUsers(DataContext context)
+        public static async Task SeedUsers(UserManager<AppUser> userManager, 
+                                            RoleManager<AppRole> roleManager)
         {
-            if (await context.Users.AnyAsync()) return; // Exits the function if the sqlite database already has data
+            if (await userManager.Users.AnyAsync()) return; // Exits the function if the sqlite database already has data
 
             var userData = await System.IO.File.ReadAllTextAsync("Data/UserSeedData.json");
             var users = JsonConvert.DeserializeObject<List<AppUser>>(userData); // Create a list of appusers from the seed data
-            foreach (var user in users) // Artificially generate login data for the user
+            if(users == null) return;
+
+            var roles = new List<AppRole>
             {
-                using var hmac = new HMACSHA512();
+                new AppRole { Name = "Member" },
+                new AppRole { Name = "Admin" },
+                new AppRole { Name = "Moderator" }
+            };
 
-                user.UserName = user.UserName.ToLower();
-                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Pa$$w0rd"));
-                user.PasswordSalt = hmac.Key;
-
-                context.Users.Add(user); // Adds user to the data context, but DOESN'T put it in the database yet
+            foreach (var role in roles)
+            {
+                await roleManager.CreateAsync(role);
             }
 
-            await context.SaveChangesAsync(); // In this case, commits the added users to the database
+            foreach (var user in users) // Artificially generate login data for the user
+            {
+                user.UserName = user.UserName.ToLower();
+
+                await userManager.CreateAsync(user, "Pa$$w0rd");
+
+                await userManager.AddToRoleAsync(user, "Member");
+            }
+
+            var admin = new AppUser
+            {
+                UserName = "admin"
+            };
+
+            await userManager.CreateAsync(admin, "Pa$$w0rd");
+            await userManager.AddToRolesAsync(admin, new[] {"Admin", "Moderator"});
         }
     }
 }

@@ -45,7 +45,7 @@ namespace API.Controllers
 
                 return thingToReturn;
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(500, "Computer says no!");
             }
