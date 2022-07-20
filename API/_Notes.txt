@@ -21,3 +21,10 @@
 - They will usually contain bits and pieces of entities, or the results of actions on entity data
 - Controllers will send ActionResults of DTOs
 - There can also be DTOs that use different permutations of the same Entity for different purposes
+
+5: Endpoints
+- These are essential as they're how we connect to the API
+- We define them in the startup class using the IApplicationBuilder.UseEndpoints method
+- Usually we define them using controllers but there are special exceptions for Hubs
+- We need to map those using protected routes for SignalR stuff
+
